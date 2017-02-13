@@ -1,0 +1,559 @@
+        <!-- Description Slide -->
+        <section>
+          <p>
+Richard in fact did write a description for this talk but unless you read this
+you will have missed in from the post for the meeting.
+          </p>
+          <p>
+We will be talking about how to use docker and Let's Encrypt as the basis for a
+system that will allow you to host your web content within continers and secured
+behind SSL. We will focus on getting the system started and work into examples
+of hosting static and dynamic content. It will be a detailed walkthrough of what
+you need to do to start running a system on your own.
+          </p>
+          <p>
+Any extra presentaion time will be open to expanded topics such as security.
+          </p>
+        </section>
+
+        <!-- Title Slide -->
+				<section>
+  					<h2>Docker &amp; Let's Encrypt</h2>
+  					<h3>20170213 - Penguins Unbound</h3>
+  					<p>
+  						    <small>Richard Isaacson / richard.c.isaacson@gmail.com</small>
+  					</p>
+            <p>
+              <small>
+                <a href="https://presentations.recycledthoughts.org/">
+                  presentations.recycledthoughts.org
+                </a>
+              </small>
+            </p>
+				</section>
+
+        <!-- goals/scope -->
+        <section>
+          <section>
+            <h3>Goals/Scope</h3>
+            <p>
+Today we are going to take a step back to look at the basics around what
+docker-engine, docker-compose and Let's Encrypt offer. Then we will look
+at how to combine these products into a single system to easily host secure
+web content.
+            </p>
+            <p>
+The final demos will focus on hosting static content and a dynamic node
+application. The concepts presented will be able to be translated to other
+runtimes with minimal research with docker.
+            </p>
+            <p>
+We are limiting ourselves to a single docker backend and will not touch on
+clustering or building images.
+            </p>
+          </section>
+
+          <section>
+            <p>
+docker-engine + docker-compose + Let's Encrypt
+            </p>
+            <p>
+=
+            </p>
+            <p>
+secure web hosting
+            </p>
+            <br />
+            <p>
+(for the cost of hosting)
+            </p>
+          </section>
+        </section>
+
+        <!-- agenda -->
+        <section>
+            <h3>agenda</h3>
+            <ul>
+                <li>whoami</li>
+                <li>about containers</li>
+                <li>about docker-engine</li>
+                <li>about docker-compose</li>
+                <li>about let's encrypt</li>
+                <li>docker + let's encrypt</li>
+                <li>basic demo</li>
+                <li>static demo</li>
+                <li>dynamic demo</li>
+            </ul>
+        </section>
+
+        <!-- whoami Slides-->
+        <section>
+            <section>
+                <h3>whoami</h3>
+                <ul>
+                    <li>Linux/Unix user since 1998</li>
+                    <br />
+                    <li>DevOps Engineer with ReachLocal</li>
+                    <br />
+                    <li>MSSE Student at the U of MN (2018)</li>
+                    <br />
+                    <li>Volunteer Coordinator with Minne*</li>
+                </ul>
+            </section>
+        </section>
+
+        <!-- about containerazation -->
+        <section>
+          <section>
+            <h3>about: containeraztion</h3>
+            <p>
+Also known as operating-sytem-level virtualization is where the kernel allows
+ for multiple isolated user-space instances rather then just one. Each instance
+ is commonly called a container and the software running inside believes that
+ is running on an individual server.
+            </p>
+            <p>
+Benefits include potentially being quicker to provision and more granular use of
+ resources
+            </p>
+          </section>
+
+          <section>
+            <h3>about: containerazation: history</h3>
+            <ul>
+              <li>1979 - chroot - Introduced in Version 7 Unix</li>
+              <ul>
+                <li>1982 - Bill Joy added chroot to BSD before 4.2BSD
+              </ul>
+              <li>2000 - FreeBSD Jails</li>
+              <li>2004 - Solaris Containers</li>
+              <li>2008 - LXC - Linux Containers</li>
+              <ul>
+                <li>kernel cgroups + isolated namespaces = isolated environment</li>
+              </ul>
+              <li>2013 - <a href="https://www.docker.com/">Docker</a></li>
+            </ul>
+          </section>
+        </section>
+
+        <!-- about docker-engine -->
+        <section>
+          <section>
+            <h3>about: docker-engine</h3>
+            <p>
+The docker-engine is the runtime execution tool for Docker containers.
+            </p>
+            <blockquote cite="https://www.docker.com/what-docker">
+&ldquo;Docker containers wrap a piece of software in a complete filesystem that contains everything needed to run: code, runtime, system tools, system libraries – anything that can be installed on a server. This guarantees that the software will always run the same, regardless of its environment.&rdquo;
+					  </blockquote>
+          </section>
+
+          <section>
+            <h3>about: docker-engine: installation</h3>
+            <ul>
+              <li>Supports: Linux, MacOS, Windows, and Cloud Services</li>
+              <li>Documentation: <a href="https://www.docker.com/products/overview">Get Docker</a></li>
+              <li>Installation Example: Fedora 25</li>
+              <pre><code class="bash" data-trim contenteditable style="font-size: 18px;">
+# Remove unofficial packages
+dnf -y remove docker docker-common container-selinux
+
+# Add the docker repo and repo requirements
+dnf -y install dnf-plugins-core &amp;&amp; dnf config-manager \
+  --add-repo \
+  https://docs.docker.com/engine/installation/linux/repo_files/fedora/docker.repo
+
+# Install the docker-engine
+dnf makecache fast &amp;&amp; dnf -y install docker-engine
+              </code></pre>
+            </ul>
+          </section>
+
+          <section>
+            <h3>about: docker-engine: enable/start &amp; docker group</h3>
+            <ul>
+              <li>enable/start</li>
+            </ul>
+            <pre><code class="bash" data-trim contenteditable style="font-size: 18px;">
+systemctl enable docker
+systemctl start docker
+            </code></pre>
+            <ul>
+              <li>docker group</li>
+            </ul>
+              <pre><code class="bash" data-trim contenteditable style="font-size: 18px;">
+groupadd docker
+usermod -aG docker $USER
+              </code></pre>
+          </section>
+
+          <section>
+            <h3>about: docker-engine: testing &amp; cleanup</h3>
+            <pre><code class="bash" data-trim contenteditable style="font-size: 18px;">
+# Run the "Hello, World" container
+docker run -it hello-world
+
+# List all containers
+docker ps --all
+
+# Remove the stopped container
+docker rm ${CONTAINER_ID}
+
+# List images
+docker images
+
+# Clean up the downloaded image
+docker rmi ${IMAGE_ID}
+            </code></pre>
+          </section>
+
+          <section>
+            <p>
+More commands are availible in the Docker <a href="https://docs.docker.com/engine/userguide/intro/">Engine user guide</a>
+ or in general in the <a href="https://docs.docker.com/">Docker Documentation</a>.
+            </p>
+          </section>
+        </section>
+
+        <!-- about docker-compose -->
+        <section>
+          <section>
+            <h3>about: docker-compose</h3>
+            <blockquote cite="https://docs.docker.com/compose/overview/">
+&ldquo;Compose is a tool for defining and running multi-container Docker applications. With Compose, you use a Compose file to configure your application’s services. Then, using a single command, you create and start all the services from your configuration.&rdquo;
+					  </blockquote>
+            <ul>
+              <li>Documentation: <a href="https://docs.docker.com/compose/overview/">Docker Compose</a></li>
+            </ul>
+          </section>
+
+          <section>
+            <h3>about: docker-compose: What?!?</h3>
+            <p>
+Docker Compose lets you define a complex software stack in a standard
+ configuration file(YAML). Once your configuration is defined you can act against
+ it with easier to remember commands.
+            </p>
+            <p>
+For example you may want to create a LAMP stack where you define and then link a
+ proxy container to a webserver container to a database container.
+            </p>
+          </section>
+
+          <section>
+            <h3>about: docker-compose: installation</h3>
+            <p>
+Package manager installation may vary. Make your life easier and just use pip.
+            </p>
+            <pre><code class="bash" data-trim contenteditable style="font-size: 18px;">
+# Install docker-compose
+pip install docker-compose
+
+# Remove docker-compose
+pip uninstall docker-compose
+            </code></pre>
+          </section>
+
+          <section>
+            <h3>about: docker-compose: docker-compose.yml</h3>
+            <p>
+The below docker command is functionaly equivilant to
+            </p>
+            <pre><code class="bash" data-trim contenteditable style="font-size: 18px;">
+docker run -d --name nginx -p 80:80 -p 443:443 nginx
+            </code></pre>
+            <p>
+this docker-compose.yml file
+            </p>
+            <pre><code class="bash" data-trim contenteditable style="font-size: 18px;">
+version: '2'
+services:
+  nginx:
+    image: nginx
+    container_name: nginx
+    ports:
+      - "80:80"
+      - "443:443"
+            </code></pre>
+            <p>
+execute with this command
+            </p>
+            <pre><code class="bash" data-trim contenteditable style="font-size: 18px;">
+docker-compose up -d
+            </code></pre>
+          </section>
+
+          <section>
+            <h3>about: docker-compose: additional commands</h3>
+            <pre><code class="bash" data-trim contenteditable style="font-size: 18px;">
+# For each container defined in the configuration
+# Stop all containers
+docker-compose stop
+
+# Remove all stopped containers
+docker-compose rm -f
+
+# List all containers
+docker-compose ps
+
+# For an individual container add at the end of the command
+docker stop nginx
+            </code></pre>
+          </section>
+        </section>
+
+        <!--about Let’s Encrypt -->
+        <section>
+          <section>
+            <h3>about: Let's Encrypt</h3>
+            <blockquote cite="https://letsencrypt.org/">
+&ldquo;Let’s Encrypt is a free, automated, and open Certificate Authority.&rdquo;
+					  </blockquote>
+            <ul>
+              <li>Homepage: <a href="https://letsencrypt.org/">https://letsencrypt.org/</a></li>
+              <li>Documentation: <a href="https://letsencrypt.org/docs/">Let's Encrypt Documentation</a></li>
+            </ul>
+          </section>
+
+          <section>
+            <h3>about: Let's Encrypt</h3>
+            <p>
+Get a SSL generated when you can prove that you have control of a domain. You use
+ the ACME client for all interaction with the Let's Encrypt services. Your can
+ prove owership of a domain by one of the following methods:
+            </p>
+            <ul>
+              <li>Provisioning a DNS record under the DOMAIN</li>
+              <li>Provisioning an HTTP resource under a well-known URI on https://DOMAIN/</li>
+            </ul>
+            <ul>
+              <li>Homepage: <a href="https://letsencrypt.org/how-it-works/">How It Works</a></li>
+            </ul>
+          </section>
+        </section>
+
+        <!--Required things for demo -->
+        <!--    Firewall Changes -->
+        <!--    DNS Entries. -->
+        <section>
+          <section>
+            <h3>requirements to run:</h3>
+            <ul>
+              <li>A host with a recent version of docker-engine and docker-compose</li>
+              <li>DNS entries pointed to your host</li>
+              <ul>
+                <li>A or CNAME Records</li>
+              </ul>
+              <li>Firewall allowing tcp/80 &amp; tcp/443 to your host</li>
+              <ul>
+                <li>Rules</li>
+                <li>NAT(?)</li>
+              </ul>
+            </ul>
+          </section>
+        </section>
+
+        <!-- Our solution -->
+        <section>
+          <section>
+            <h3>our solution: docker + let's encrypt</h3>
+            <p>
+We are not going to build anything from scratch but leverage projects that people
+ have publicly shared. We are going to use these containers:
+            </p>
+            <ul>
+              <li><a href="https://hub.docker.com/r/jrcs/letsencrypt-nginx-proxy-companion/">jrcs/letsencrypt-nginx-proxy-companion</a> (Basis)</li>
+              <li><a href="https://hub.docker.com/r/jwilder/nginx-proxy/">jwilder/nginx-proxy</a> (Nginx + Config Gen)</li>
+            </ul>
+            <p>
+There is an alternate path that may be more secure but I have had trouble with
+ setting up.
+            </p>
+            <ul>
+              <li>jrcs/letsencrypt-nginx-proxy-companion</li>
+              <li><a href="https://hub.docker.com/r/jwilder/docker-gen/">jwilder/docker-gen</a> Config Gen</li>
+              <li><a href="https://hub.docker.com/_/nginx/">nginx</a> Official Image</li>
+            </ul>
+          </section>
+        </section>
+
+        <!--Pulling docker-letsencrypt -->
+        <section>
+          <section>
+            <h3>the work is already done</h3>
+            <p>
+I have spent some time getting this to work and to save you time have created a
+ github.com repository. Pull the following endpoint and customize for your needs:
+            </p>
+            <pre><code class="bash" data-trim contenteditable style="font-size: 18px;">
+git checkout http://github.com/risaacson/docker-letsencrypt-example.git
+            </code></pre>
+          </section>
+        </section>
+
+        <!--Caveat about needing latest docker-selinux -->
+        <section>
+          <section>
+            <h3>where i have had problems before. . .</h3>
+            <p>
+Every probem that I have had can be traced back to selinux misconfigurations. All
+ of these problems seem to have been fixed with the recent versions in the official
+ repository. Keep an eye on your journal's logging and your system logging.
+            </p>
+          </section>
+        </section>
+
+        <!--Read through of docker-compose.yml -->
+        <section>
+          <section>
+            <h3>solution docker-compose.yml: header</h3>
+            <pre><code class="bash" data-trim contenteditable style="font-size: 18px;">
+version: '2'
+services:
+            </code></pre>
+          </section>
+          <section>
+            <h3>solution docker-compose.yml: nginx-proxy</h3>
+            <pre><code class="bash" data-trim contenteditable style="font-size: 18px;">
+  nginx-proxy:
+    image: jwilder/nginx-proxy
+    container_name: nginx-proxy
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - "/etc/nginx/conf.d"
+      - "/etc/nginx/vhost.d"
+      - "/usr/share/nginx/html"
+      - "${PATH_TO_DIR}/docker-pop/certs:/etc/nginx/certs:ro"
+      - "/var/run/docker.sock:/tmp/docker.sock:ro"
+            </code></pre>
+          </section>
+          <section>
+            <h3>solution docker-compose.yml: letsencrypt-nginx-proxy-companion</h3>
+            <pre><code class="bash" data-trim contenteditable style="font-size: 18px;">
+  letsencrypt-nginx-proxy-companion:
+    image: jrcs/letsencrypt-nginx-proxy-companion
+    container_name: letsencrypt-nginx-proxy-companion
+    volumes_from:
+      - nginx-proxy
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock:ro"
+      - "${PATH_TO_DIR}/docker-pop/certs:/etc/nginx/certs:rw"
+    depends_on:
+      - nginx-proxy
+            </code></pre>
+          </section>
+
+          <section>
+            <h3>solution docker-compose.yml: example container</h3>
+            <p>
+Returns the container name.
+            </p>
+            <pre><code class="bash" data-trim contenteditable style="font-size: 18px;">
+  whoami:
+    image: jwilder/whoami
+    container_name: whoami
+    environment:
+      - VIRTUAL_HOST=whoami.${YOUR_DOMAIN}
+      - VIRTUAL_PORT=8000
+      - LETSENCRYPT_HOST=whoami.${YOUR_DOMAIN}
+      - LETSENCRYPT_EMAIL=${YOUR_E-MAIL}
+            </code></pre>
+          </section>
+        </section>
+
+        <!--Demo on pop -->
+        <section>
+          <section>
+            <h3>demo:</h3>
+          </section>
+        </section>
+
+        <!--Testing -->
+        <section>
+          <section>
+            <h3>testing:</h3>
+            <ul>
+              <li>Logs!</li>
+            </ul>
+            <pre><code class="bash" data-trim contenteditable style="font-size: 18px;">
+docker-compose logs nginx-proxy
+docker-compose logs letsencrypt-nginx-proxy-companion
+docker-compose logs whoami
+            </code></pre>
+            <ul>
+              <li>CUrl</li>
+            </ul>
+            <pre><code class="bash" data-trim contenteditable style="font-size: 18px;">
+curl -sv http://whoami.DOMAIN
+curl -sv https://whoami.DOMAIN
+            </code></pre>
+          </section>
+        </section>
+
+        <!--Static content example -->
+        <section>
+          <section>
+            <h3>static content:</h3>
+            <pre><code class="bash" data-trim contenteditable style="font-size: 18px;">
+  static:
+    image: nginx
+    container_name: static
+    volumes:
+      - "${PATH_TO_DIR}/docker-pop/static:/usr/share/nginx/html:ro"
+    environment:
+      - VIRTUAL_HOST=static.${YOUR_DOMAIN}
+      - VIRTUAL_PORT=80
+      - LETSENCRYPT_HOST=static.${YOUR_DOMAIN}
+      - LETSENCRYPT_EMAIL=${YOUR_E-MAIL}
+    expose:
+      - "80"
+    depends_on:
+      - letsencrypt-nginx-proxy-companion
+            </code></pre>
+          </section>
+        </section>
+
+        <!--Dynamic content example -->
+        <section>
+          <section>
+            <h3>dynamic content:</h3>
+            <pre><code class="bash" data-trim contenteditable style="font-size: 18px;">
+  dynamic:
+    image: node:latest
+    container_name: dynamic
+    volumes:
+      - "${PATH_TO_DIR}/docker-pop/dynamic:/mnt"
+    working_dir: /mnt
+    command: [./entrypoint.sh]
+    environment:
+      - VIRTUAL_HOST=dynamic.${YOUR_DOMAIN}
+      - VIRTUAL_PORT=8123
+      - LETSENCRYPT_HOST=dynamic.${YOUR_DOMAIN}
+      - LETSENCRYPT_EMAIL=${YOUR_E-MAIL}
+    expose:
+      - "8123"
+    depends_on:
+      - letsencrypt-nginx-proxy-companion
+            </code></pre>
+          </section>
+        </section>
+
+        <section>
+          <section>
+            <h3>conclusion:</h3>
+            <p>
+Service secure web content does not need to be complex or expensive. By mixing
+ nginx, Let's Encrypt and Docker together you can easily build a system for securly
+ serving your web content.
+            </p>
+          </section>
+        </section>
+
+        <section>
+          <h3>Questions?</h3>
+          <br />
+          <a href="https://presentations.recycledthoughts.org/html/20170213-Penguins_Unbound/">https://presentations.recycledthoughts.org/html/20170213-Penguins_Unbound/</a>
+          <a href="https://presentations.recycledthoughts.org/">https://presentations.recycledthoughts.org/</a>
+        </section>
