@@ -6,13 +6,13 @@ you will have missed in from the post for the meeting.
           </p>
           <p>
 We will be talking about how to use docker and Let's Encrypt as the basis for a
-system that will allow you to host your web content within continers and secured
+system that will allow you to host your web content within containers and secured
 behind SSL. We will focus on getting the system started and work into examples
-of hosting static and dynamic content. It will be a detailed walkthrough of what
+of hosting static and dynamic content. It will be a detailed walk-through of what
 you need to do to start running a system on your own.
           </p>
           <p>
-Any extra presentaion time will be open to expanded topics such as security.
+Any extra presentation time will be open to expanded topics such as security.
           </p>
         </section>
 
@@ -107,7 +107,7 @@ secure web hosting
           <section>
             <h3>about: containeraztion</h3>
             <p>
-Also known as operating-sytem-level virtualization is where the kernel allows
+Also known as operating-system-level virtualization is where the kernel allows
  for multiple isolated user-space instances rather then just one. Each instance
  is commonly called a container and the software running inside believes that
  is running on an individual server.
@@ -209,7 +209,7 @@ docker rmi ${IMAGE_ID}
 
           <section>
             <p>
-More commands are availible in the Docker <a href="https://docs.docker.com/engine/userguide/intro/">Engine user guide</a>
+More commands are available in the Docker <a href="https://docs.docker.com/engine/userguide/intro/">Engine user guide</a>
  or in general in the <a href="https://docs.docker.com/">Docker Documentation</a>.
             </p>
           </section>
@@ -257,7 +257,7 @@ pip uninstall docker-compose
           <section>
             <h3>about: docker-compose: docker-compose.yml</h3>
             <p>
-The below docker command is functionaly equivilant to
+The below docker command is functionality equivalent to
             </p>
             <pre><code class="bash" data-trim contenteditable style="font-size: 18px;">
 docker run -d --name nginx -p 80:80 -p 443:443 nginx
@@ -320,7 +320,7 @@ docker stop nginx
             <p>
 Get a SSL generated when you can prove that you have control of a domain. You use
  the ACME client for all interaction with the Let's Encrypt services. Your can
- prove owership of a domain by one of the following methods:
+ prove ownership of a domain by one of the following methods:
             </p>
             <ul>
               <li>Provisioning a DNS record under the DOMAIN</li>
@@ -396,7 +396,7 @@ git checkout http://github.com/risaacson/docker-letsencrypt-example.git
           <section>
             <h3>where i have had problems before. . .</h3>
             <p>
-Every probem that I have had can be traced back to selinux misconfigurations. All
+Every problem that I have had can be traced back to selinux misconfigurations. All
  of these problems seem to have been fixed with the recent versions in the official
  repository. Keep an eye on your journal's logging and your system logging.
             </p>
@@ -545,7 +545,7 @@ curl -sv https://whoami.DOMAIN
             <h3>conclusion:</h3>
             <p>
 Service secure web content does not need to be complex or expensive. By mixing
- nginx, Let's Encrypt and Docker together you can easily build a system for securly
+ nginx, Let's Encrypt and Docker together you can easily build a system for securely
  serving your web content.
             </p>
           </section>
