@@ -1,0 +1,420 @@
+<!-- Any section element inside of this container is displayed as a slide -->
+<!--<div class="slides">-->
+    <section>
+        <h1>Systems Inferno</h1>
+        <h3>Automation from Hell to Heaven</h3>
+        <p>
+            <small><a href="http://risaacson.github.io">Richard Isaacson</a> / <a href="http://twitter.com/risaacson">@risaacson</a></small>
+        </p>
+
+        <aside class="notes">
+            This is the title page.<br />
+            Keep in mind that the story that is being told here is a inverse of Dante's Inferno.
+        </aside>
+    </section>
+
+    <section>
+        <p>A conversation of the Systems journey from Operator to Architect. We will cover techniques and
+            tools that apply to each of the job title stages. In addition we will talk about how systems
+            automation isn’t confined and is becoming relevant to the application development life-cycle.
+            While this talk is very Unix family focused the general topics should apply to any operating
+            system. Management is welcome to attend as the talk may give them an idea of what their teams
+            should be doing and how to support their team.</p>
+
+        <p>We will not be dwelling long on on any one technology stack as we will favor a strong overview of
+            what the journey should look like. Executing commands from notes, from memory, in scripts, as a
+            part of tools, and via push button self-service will be our major mile markers.</p>
+
+        <aside class="notes">
+            It is important to set the ground rules.
+        </aside>
+    </section>
+
+    <section>
+        <h2>Our Goal:</h2>
+        To have a conversation that covers the evolution of software and systems professionals including how automation is increasingly important.<br />
+        <br />
+        <h2>Our Format:</h2>
+        Run through slides.<br />
+        Open it up for conversation.<br />
+        Wrap-up.<br />
+        Profit.
+
+        <aside class="notes">
+            It is important to set the ground rules.
+        </aside>
+    </section>
+
+    <section>
+        <h2>Who am I to talk to you like this?</h2>
+        ~11 years Unix operations -> Senior Systems Engineer<br />
+        ~3 years Software Developer -> Senior Software Engineer<br />
+        <br />
+        <a href="http://digitalriver.com">Digital River, Inc.</a> -&gt <a href="http://eucalyptus.com">Eucalyptus, Inc.</a> -&gt <a href="http://ansible.com">Ansible, Inc.</a> -&gt <a href="http://whcc.com">WHCC</a><br />
+        <br />
+        Philosophy Minor<br />
+        <br />
+        <a href="http://minnestar.org">Minne*</a> Volunteer Coordinator
+
+        <aside class="notes">
+            Why should I even be talking here?
+        </aside>
+    </section>
+
+    <section>
+        <h2>Disclaimer Slide:</h2>
+        I take the blame for anything that isn't attributed.
+
+        <aside class="notes">
+            Everybody needs a disclaimer so there isn't trouble.
+        </aside>
+    </section>
+
+    <section>
+        <section>
+            We are going to talk about <span style="color: red;"><b>roles</b></span> not <span style="color: red;"><b>titles</b></span>.<br />
+            <span style="color: red;"><b>Titles</b></span> are the public representation of who we are.<br />
+            <span style="color: red;"><b>Roles</b></span> are what we actually do.
+        </section>
+
+        <section>
+            <h2>In-Scope Roles:</h2>
+            <ul>
+                <li>Systems Operator/Hobbyist</li>
+                <li>Systems Administrator</li>
+                <li>Software Developer</li>
+                <li>Systems Engineer</li>
+                <li>Software Engineer</li>
+                <li>Systems Architect</li>
+                <li>Software Architect</li>
+            </ul>
+
+            <aside class="notes">
+            </aside>
+        </section>
+
+        <section>
+            <h2>Out-of-Scope Roles:</h2>
+            Valid but beyond the focus for today.<br />
+            <ul>
+                <li>Analyst</li>
+                <li>Technical Writer</li>
+            </ul>
+
+            <aside class="notes">
+            </aside>
+        </section>
+    </section>
+
+    <section>
+        <!-- Systems Operator/Hobbyist Stack -->
+        <section>
+            <h2>Systems Operator/Hobbyist:</h2>
+            <ul>
+                <li>Monitors the systems.</li>
+                <li>Little domain knowledge.</li>
+                <li>Executes prepared tasks. (recipes)</li>
+                <li>Tier 1 Support</li>
+                <li>Uses recipes to accomplish tasks.</li>
+                <li>Produces: buffering for senior co-worker</li>
+                <li>Produces: explores and learns new things</li>
+                <li>Run books and web searches.</li>
+
+            </ul>
+
+            <aside class="notes">
+            </aside>
+        </section>
+
+        <section>
+            <h2>Examples:</h2>
+            <a href="http://lmgtfy.com/?q=how+to+install+postfix_mail+server+ubuntu+13.10">how to install postfix mail server ubuntu 13.10</a><br />
+            <a href="http://lmgtfy.com/?q=how+to+start+with+arduino">how to start with arduino</a><br />
+            <a href="http://lmgtfy.com/?q=iOS+xcode+hello+world">iOS xcode hello world</a><br />
+            <br />
+            <a href="http://howtoforge.org/">HowtoForge</a>
+
+            <aside class="notes">
+            </aside>
+        </section>
+    </section>
+
+    <section>
+        <!--Systems Administrator / Software Developer Stack-->
+        <!--bash/python/ruby/perl-->
+        <section>
+            <h2>Systems Administrator:</h2>
+            <ul>
+                <li>Maintains the systems.</li>
+                <li>Knows where to start looking for a solution.</li>
+                <li>Has accumulated knowledge and builds from previous experiences.</li>
+                <li>Tier 2 Support</li>
+                <li>Fires over deploy and maintenance queues.</li>
+                <li>Produces: hopefully, stable working systems</li>
+                <li>Scripting to make tasks easier.</li>
+            </ul>
+
+            <aside class="notes">
+            </aside>
+        </section>
+
+        <section>
+            <h2>Systems Administrator: Automation through Scripting</h2>
+            Most artifacts are not maintained by the organization but live in home directories.<br />
+            <br />
+            <ul>
+                <li><a href="https://www.gnu.org/software/bash/">bash</a></li>
+                <li><a href="https://www.python.org/">Python</a></li>
+                <li><a href="https://www.ruby-lang.org/">Ruby</a></li>
+                <li><a href="https://www.perl.org/">Perl</a></li>
+            </ul>
+
+            <aside class="notes">
+            </aside>
+        </section>
+
+        <section>
+            <h2>Example:</h2>
+            <pre><code data-trim contenteditable>
+#!/usr/bin/env bash
+
+OPTIONS="-i ${HOME}/.vagrant.d/insecure_private_key"
+OPTIONS="${OPTIONS} -o UserKnownHostsFile=/dev/null"
+OPTIONS="${OPTIONS} -o StrictHostKeyChecking=no"
+
+for i in $( seq 0 2 ); do
+    ssh ${OPTIONS} vagrant@192.168.251.1${i} 'hostname' 2>/dev/null
+done
+                        </code></pre>
+
+            <aside class="notes">
+            </aside>
+        </section>
+    </section>
+
+    <section>
+        <!--Software Developer Stack-->
+        <section>
+            <h2>Software Developer:</h2>
+            <ul>
+                <li>Maintains the applications.</li>
+                <li>Tier 2 Support.</li>
+                <li>Maintenance over features.</li>
+                <li>Produces: hopefully, stable software</li>
+            </ul>
+
+            <aside class="notes">
+            </aside>
+        </section>
+
+    </section>
+
+    <section>
+        <!--Systems Engineer Stack-->
+        <section>
+            <h2>Systems Engineer:</h2>
+            <ul>
+                <li>Builds the systems.</li>
+                <li>Understands the domain specific bigger picture.</li>
+                <li>Tier 3 Support.</li>
+                <li>Queues over fires.</li>
+                <li>Produces: documentation / recipes / inital running systems</li>
+                <li>Automation and Orchestration</li>
+            </ul>
+
+            <aside class="notes">
+            </aside>
+        </section>
+
+        <section>
+            <h2>Systems Engineer: Automation through Tools</h2>
+            Artifacts are usually maintained by the organization.<br />
+            <br />
+            <ul>
+                <li><a href="http://www.getchef.com/">Chef</a></li>
+                <li><a href="http://puppetlabs.com/">Puppet</a></li>
+                <li><a href="http://www.ansible.com">Ansible</a></li>
+                <li><a href="https://aws.amazon.com/opsworks/">Amazon OpsWorks</a></li>
+                <li><a href="http://www.cfengine.com/">cfEngine</a></li>
+                <li><a href="http://bcfg2.org/">Bcfg2</a></li>
+                <li><a href="http://rsug.itd.umich.edu/software/radmind/">Radmind</a></li>
+                <li><a href="http://saltstack.com/">Salt</a></li>
+                <li><a href="">Self-Service</a></li>
+                <li><a href="http://www.spacewalkproject.org/">Spacewalk</a></li>
+            </ul>
+
+            <aside class="notes">
+            </aside>
+        </section>
+
+        <section>
+            <h2>Systems Engineer: Orchestration through Tools</h2>
+            <ul>
+                <li><a href="http://jenkins-ci.org">Jenkins</a></li>
+                <li><a href="https://aws.amazon.com/cloudformation/">Amazon CloudFormation</a></li>
+                <li><a href="http://puppetlabs.com/mcollective">MCollective</a> (Marionette Collective)</li>
+                <li><a href="http://www.rightscale.com/">RightScale</a></li>
+                <li><a href="http://www-03.ibm.com/software/products/en/smartcloud-orchestrator/">SmartCloud Orchestrator</a></li>
+            </ul>
+
+            <aside class="notes">
+            </aside>
+        </section>
+
+        <section>
+            <h2>Systems Engineer: Other Tools</h2>
+            <ul>
+                <li><a href="">Git</a></li>
+                <li><a href="https://aws.amazon.com/cloudwatch/">Amazon CloudWatch</a></li>
+                <li><a href="http://vagrantup.com/">Vagrant</a> (local prototyping)</li>
+                <li><a href="http://nodejs.org">NodeJS</a> (rapidly build services)</li>
+            </ul>
+
+            <aside class="notes">
+            </aside>
+        </section>
+
+        <section>
+            <h2>Example:</h2>
+            Vagrant to prototype systems.<br />
+            <pre><code data-trim contenteditable>
+vagrant up
+vagrant destroy -f
+	    				</code></pre>
+            Ansible to automate configuration and application deployment.<br />
+            Jenkins to orchestrate execution.
+
+            <aside class="notes">
+            </aside>
+        </section>
+    </section>
+
+    <section>
+        <!--Software Engineer Stack-->
+        <section>
+            <h2>Software Engineer:</h2>
+            <ul>
+                <li>Builds the applications.</li>
+                <li>Features over maintenance.</li>
+                <li>Tier 3 Support.</li>
+                <li>Produces: software to be implemented by Systems Engineers</li>
+                <li>Overlapping skill sets with Systems Engineers (scale/focus)</li>
+            </ul>
+
+            <aside class="notes">
+            </aside>
+        </section>
+    </section>
+
+    <section>
+        <!--Systems/Software Architect:-->
+        <section>
+            <h2>Systems/Software Architect:</h2>
+            <ul>
+                <li>Designs the Systems/Software.</li>
+                <li>Fully understands the bigger picture.</li>
+                <li>Produces: roadmaps / white papers / mock-ups / prototypes</li>
+            </ul>
+
+            <aside class="notes">
+            </aside>
+        </section>
+    </section>
+
+    <section>
+        <section>
+            <h2>&ltINSERT&gt</h2>
+            <h1>conversation</h1>
+            <h2>&lt/INSERT&gt</h2>
+
+            <aside class="notes">
+            </aside>
+        </section>
+
+        <section>
+            <h2>Questions?</h2>
+            <ul>
+                <li>What current roles do you hold?</li>
+                <li>How do you learn about other roles?</li>
+                <li>How do you pass on tribal knowledge about your roles?</li>
+                <li>What tools help you out in your roles? (write on board)</li>
+                <li>What is missing?</li>
+            </ul>
+
+            <aside class="notes">
+            </aside>
+        </section>
+    </section>
+
+    <section>
+        <section>
+            <h1>Wrap-Up</h1>
+            A couple more things.
+
+            <aside class="notes">
+            </aside>
+        </section>
+
+        <section>
+            <h2>Did you see:</h2>
+            What is DevOps/Infrastructure as Code and Why Should I Care? - Jason Clifford<br>
+            Vagrant Up - Kyle Boon<br />
+            Agile Testing with a Side of TDD - Jenna Pederson
+
+            <aside class="notes">
+            </aside>
+        </section>
+
+        <section>
+            <h2>I am sorry we missed:</h2>
+            Packing Your *nix Toolbox - Chris Johnson
+
+            <aside class="notes">
+            </aside>
+        </section>
+
+        <section>
+            <h2>Next go see:</h2>
+            Building Wearables - Kristina Durivage<br />
+            Rapson 43
+
+            <aside class="notes">
+            </aside>
+        </section>
+
+        <section>
+            Next TCCC please continue to support<br />
+            <span style="color: red;"><b>systems</b></span><br />
+            and<br />
+            <span style="color: red;"><b>hardware</b></span><br />
+            sessions.
+
+            <aside class="notes">
+            </aside>
+        </section>
+    </section>
+
+    <section>
+        <h2>Shameless Plug</h2>
+        <hr />
+        Minne*'s MinneBar9<br />
+        April 12th<br />
+        Tickets are sold out but there are volunteer positions open.<br />
+        &ltHINT&gtVolunteering gets you a ticket.&lt/HINT&gt
+
+        <aside class="notes">
+        </aside>
+    </section>
+
+    <section>
+        <h1>Tack så mycket!</h1>
+        <h3><a href="http://risaacson.github.io">Richard Isaacson</a> / <a href="http://twitter.com/risaacson">@risaacson</a></h3><br />
+        Slides -&gt <a href="https://github.com/risaacson/systems_inferno">https://github.com/risaacson/systems_inferno</a>
+        <br />
+        <small>slides generated via <a href="http://lab.hakim.se/reveal-js/">Reveal.JS</a></small>
+
+        <aside class="notes">
+        </aside>
+    </section>
+
+<!--</div>-->
